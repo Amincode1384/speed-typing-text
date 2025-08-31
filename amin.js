@@ -1,102 +1,67 @@
-const theTimer = document.querySelector(".Timer");
+const theTimer = document.querySelector(".timer");
 const testArea = document.querySelector("#test-area");
 const originText = document.querySelector("#origin-text p").innerHTML;
-const testWrapper=document.querySelector(".test-wrapper");
-const resetButton=document.querySelector("#reset");
+const testWrapper = document.querySelector(".test-wrapper");
+const resetButton = document.querySelector("#reset");
 
+let timer = [0, 0, 0, 0]; // دقیقه، ثانیه، صدم ثانیه، کل صدم‌ها
+let timerRunning = false;
+let interval;
 
-
-var timer=[0,0,0,0];
-var timerRunnig=false;
-var interval;
-
-
-function leadingZero(time){
-
-    if(time<=9)
-    {
-     time="0"+time;
-    }
-
-    return time;
+// اضافه کردن صفر جلوی عددهای تک رقمی
+function leadingZero(time) {
+    return (time <= 9) ? "0" + time : time;
 }
 
-function runTimer(){
- currentTime= leadingzero(timer[0])+":"+leadingzero(timer[1])+":"+leadingzero(timer[2]);
-theTimer.innerHTML= currentTime;
-timer[3]++;
-timer[0] = Math.floor(timer[3]/100/60); // دقیقه
-timer[1] = Math.floor(timer[3]/100) % 60; // ثانیه
-timer[2] = timer[3] % 100; // صدم ثانیه
+function runTimer() {
+    let currentTime = 
+        leadingZero(timer[0]) + ":" +
+        leadingZero(timer[1]) + ":" +
+        leadingZero(timer[2]);
 
+    theTimer.innerHTML = currentTime;
 
+    timer[3]++;
+    timer[0] = Math.floor((timer[3] / 100) / 60);              // دقیقه
+    timer[1] = Math.floor(timer[3] / 100) - (timer[0] * 60);   // ثانیه
+    timer[2] = Math.floor(timer[3] - (timer[1] * 100) - (timer[0] * 6000)); // صدم ثانیه
 }
 
+function spellCheck() {
+    let textEntered = testArea.value;
+    let originTextMatch = originText.substring(0, textEntered.length);
 
-
-function spellCheck(){
-let textEntered=testArea.value;
-let originTextMatch=originText.substring(0,textEntered.length);
-
-
-if(textEntered==originText)
-{
-
-testWrapper.style.borderColor="green";
-clearInterval(interval);
-
-}else{
-    if(textEntered==originTextMatch){
-
-    testWrapper.style.borderColor="yellow";
-  
-    }
-    else
-    {
-        
-        testWrapper.style.borderColor="red";
+    if (textEntered === originText) {
+        testWrapper.style.borderColor = "green";
+        clearInterval(interval);
+    } else {
+        if (textEntered === originTextMatch) {
+            testWrapper.style.borderColor = "yellow";
+        } else {
+            testWrapper.style.borderColor = "red";
+        }
     }
 }
-}
 
-
-function reset(){
+function reset() {
     clearInterval(interval);
-    interval=null;
-    timer=[0,0,0,0];
-    timerRunnig=false;
+    interval = null;
+    timer = [0, 0, 0, 0];
+    timerRunning = false;
 
-
-    testArea.value="";
-    theTimer.innerHTML="00:00:00";
-    testWrapper.style.borderColor="grey";
-
+    testArea.value = "";
+    theTimer.innerHTML = "00:00:00";
+    testWrapper.style.borderColor = "grey";
 }
 
-
-function Start(){
-  
-    let textEnteredLength=testArea.value.length;
-
-    if(textEnteredLength==0 && !timerRunnig)
-    {
-        timerRunnig=true;
-     interval = setInterval(runTimer,10);
-        
+function start() {
+    let textEnteredLength = testArea.value.length;
+    if (textEnteredLength === 0 && !timerRunning) {
+        timerRunning = true;
+        interval = setInterval(runTimer, 10);
     }
-    
-
-
 }
 
-
-
-
-testArea.addEventListener("keypress",Start);
-testArea.addEventListener("keyup",spellCheck);
-resetButton.addEventListener("click",reset);
-
-
-
-
-
+testArea.addEventListener("keypress", start);
+testArea.addEventListener("keyup", spellCheck);
+resetButton.addEventListener("click", reset);

@@ -13,9 +13,3 @@ In this app, the user must type the sample text exactly as shown. Once the text 
 - Real-time accuracy check of typed text against the sample  
 - Built with pure HTML, CSS, and JavaScript (no external libraries)  
 
----
-
-## 🛠️ How to Use  
-1. Clone the repository:  
-   `bash
-   git clone https://github.com/username/repository-name.git
